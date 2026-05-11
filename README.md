@@ -181,3 +181,8 @@ A: T 恤模板换了之后需要重新校准坐标。运行 `python scripts/cali
 
 **Q: 实名认证一直在审核**  
 A: 一般 5–30 分钟，最长一小时。等审核期间可以先把代码环境搭好、先不跑需要 API 的部分。
+###设计图
+<img width="1818" height="631" alt="dcf998ea350fc86df66f1aa422d69396" src="https://github.com/user-attachments/assets/3226999e-ce37-449d-b250-10f5ed73df3a" />
+
+<img width="1765" height="910" alt="90da026a81ef50ba6670d5a58d19192b" src="https://github.com/user-attachments/assets/31eabbd7-937d-484b-b037-6abc6465beee" />
+
