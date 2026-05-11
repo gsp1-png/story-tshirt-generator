@@ -77,7 +77,7 @@ def extract_style(image_path: str) -> str:
 
     response = dashscope.MultiModalConversation.call(
 
-        model="qwen-vl-max",
+        model="qwen3-vl-plus",
 
         messages=[
             {

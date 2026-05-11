@@ -1,4 +1,3 @@
-
 import os
 import time
 import base64
@@ -61,7 +60,9 @@ def generate_image(
     position: str,
     save_dir: str = "outputs",
     filename: str = None,
-    style_image_path: str = None,   # 用户上传参考图
+    style_image_path: str = None,   # 参考图路径
+    ref_mode: str = "refonly",      # refonly=参考生成 repaint=重绘
+    ref_strength: float = 0.5,      # 参考强度，越高越贴近参考图
 ) -> str:
 
     size = SIZE_MAP.get(position, "1024*1024")
@@ -77,17 +78,17 @@ def generate_image(
     save_path = Path(save_dir) / filename
 
     # ─────────────────────────────
-    # 使用参考图约束风格
+    # 使用参考图约束
     # ─────────────────────────────
     if style_image_path:
 
         print(
             f"  ⏳ 生成 [{position}] "
-            f"（参考用户风格图）..."
+            f"（ref_mode={ref_mode}, ref_strength={ref_strength}）..."
         )
 
         response = ImageSynthesis.call(
-            model="wanx2.1-t2i-turbo",
+            model="wanx2.1-t2i-plus",
 
             prompt=prompt,
 
@@ -99,9 +100,9 @@ def generate_image(
                 style_image_path
             ),
 
-            ref_strength=0.5,
+            ref_strength=ref_strength,
 
-            ref_mode="style",
+            ref_mode=ref_mode,
         )
 
     # ─────────────────────────────
@@ -114,7 +115,7 @@ def generate_image(
         )
 
         response = ImageSynthesis.call(
-            model="wanx2.1-t2i-turbo",
+            model="wanx2.1-t2i-plus",
 
             prompt=prompt,
 
@@ -133,7 +134,13 @@ def generate_image(
             f"{response.message}"
         )
 
-    # 获取图片URL
+    # 获取图片URL（加空结果兜底）
+    if not response.output.results:
+        raise RuntimeError(
+            f"图像生成返回空结果 | 版位: {position}\n"
+            f"完整返回：{response}"
+        )
+
     img_url = response.output.results[0].url
 
     # 下载图片
